@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>搭建博客</title>
+      <link href="/2023/03/22/build-block/"/>
+      <url>/2023/03/22/build-block/</url>
+      
+        <content type="html"><![CDATA[<h1 id="新搭建的博客文章"><a href="#新搭建的博客文章" class="headerlink" title="新搭建的博客文章"></a>新搭建的博客文章</h1><p>测试一下:)</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> others </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> others </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>My first blog</title>
       <link href="/2023/03/21/my-first-blog/"/>
       <url>/2023/03/21/my-first-blog/</url>

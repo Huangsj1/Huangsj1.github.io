@@ -6,7 +6,7 @@
   <link href="http://huangsj1.github.io/atom.xml" rel="self"/>
   
   <link href="http://huangsj1.github.io/"/>
-  <updated>2023-03-21T14:30:56.223Z</updated>
+  <updated>2023-03-22T07:34:22.580Z</updated>
   <id>http://huangsj1.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>搭建博客</title>
+    <link href="http://huangsj1.github.io/2023/03/22/build-block/"/>
+    <id>http://huangsj1.github.io/2023/03/22/build-block/</id>
+    <published>2023-03-22T07:31:25.000Z</published>
+    <updated>2023-03-22T07:34:22.580Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h1 id=&quot;新搭建的博客文章&quot;&gt;&lt;a href=&quot;#新搭建的博客文章&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="others" scheme="http://huangsj1.github.io/categories/others/"/>
+    
+    
+    <category term="others" scheme="http://huangsj1.github.io/tags/others/"/>
+    
+  </entry>
   
   <entry>
     <title>My first blog</title>
