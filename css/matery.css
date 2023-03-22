@@ -33,6 +33,7 @@
     }
 }
 
+/*
 body {
     background-color: #eaeaea;
     margin: 0;
@@ -40,6 +41,15 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
 }
+*/
+body {
+    /* background-color: #eaeaea; */
+    background: linear-gradient(60deg, rgba(255, 165, 150, 0.5) 5%, rgba(0, 228, 255, 0.35)) 0% 0% / cover, url("https://ae01.alicdn.com/kf/H18a4b998752a4ae68b8e85d432a5aef0l.png"), url("https://ae01.alicdn.com/kf/H21b5f6b8496141a1979a33666e1074d9x.jpg") 0px 0px;
+    background-attachment: fixed;
+    margin: 0;
+    color: #7F95D1;
+}
+
 
 h1 {
     margin: 48px 0 22px -5px;
@@ -241,11 +251,11 @@ mark {
 }
 
 .bg-color {
-    background-image: linear-gradient(to right, #8cbf80 0%, #128c6f 100%);
+    background-image: linear-gradient(to right, #ff9999 0%, #ff6666 100%);
 }
 
 .text-color {
-    color: #0f9d58 !important;
+    color: #ff6666 !important;
 }
 
 .white-color {
@@ -257,7 +267,7 @@ mark {
     position: fixed;
     bottom: 0;
     z-index: 300;
-    background: linear-gradient(to right, #4cbf30 0%, #0f9d58 100%);
+    background: linear-gradient(to right, #ff9999 0%, #ff6666 100%);
     opacity: 0.8;
 }
 
@@ -550,10 +560,12 @@ header .go-back i {
     height: 40vh !important;
 }
 
+/*
 .bg-cover:after {
     -webkit-animation: rainbow 60s infinite;
     animation: rainbow 60s infinite;
 }
+*/
 
 .bg-cover:before,
 .bg-cover:after {
@@ -1319,7 +1331,7 @@ thead {
 
 .chip-container .chip:hover {
     color: #fff;
-    background: linear-gradient(to right, #4cbf30 0%, #0f9d58 100%) !important;
+    background: linear-gradient(to right, #ff9999 0%, #ff6666 100%) !important;
 }
 
 .chip .tag-length {
@@ -1395,7 +1407,7 @@ thead {
     left: 18px;
     height: 100%;
     width: 4px;
-    background: #0f9d58;
+    background: #ff6666;
 }
 
 @media only screen and (min-width: 900px) {
@@ -1631,8 +1643,8 @@ thead {
     margin: 0 0.5rem;
     padding: 0;
     color: #fff;
-    border: 1px solid #0f9d58;
-    background: radial-gradient(#4cbf30, #0f9d58);
+    border: 1px solid #ff6666;
+    background: radial-gradient(#ff9999, #ff6666);
     font-size: 0.9rem;
     border-radius: 50%;
     box-shadow: 0 4px 6px rgba(50, 50, 93, .21), 0 2px 3px rgba(0, 0, 0, .1);
@@ -1808,8 +1820,8 @@ thead {
 
 .other-skills .chip:hover {
     color: #fff;
-    background: linear-gradient(to right, #4cbf30 0%, #0f9d58 100%);
-    border: 1px solid #4cbf30;
+    background: linear-gradient(to right, #ff9999 0%, #ff6666 100%);
+    border: 1px solid #ff9999;
     box-shadow: 0 5px 5px rgba(0, 0, 0, .25)
 }
 
@@ -2140,3 +2152,19 @@ footer .copy-right {
     padding: 0;
     margin: 0;
 }
+
+/* 滚动条 */
+::-webkit-scrollbar-thumb {
+    background-color: #FF2A68;
+    background-image: -webkit-linear-gradient(45deg,rgba(255,255,255,.4) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.4) 50%,rgba(255,255,255,.4) 75%,transparent 75%,transparent);
+    border-radius: 3em;
+}
+::-webkit-scrollbar-track {
+    background-color: #ffcacaff;
+    border-radius: 3em;
+}
+::-webkit-scrollbar {
+    width: 8px;
+    height: 15px;
+}
+
