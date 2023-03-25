@@ -125,10 +125,24 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>http://huangsj1.github.io/tags/gdb/</loc>
+    <lastmod>2023-03-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
     <loc>http://huangsj1.github.io/categories/others/</loc>
+    <lastmod>2023-03-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://huangsj1.github.io/categories/tools/</loc>
     <lastmod>2023-03-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
