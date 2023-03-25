@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="test_my_site, Hsj&#39;s blog">
+    <meta name="keywords" content="qemu+gdb, Hsj&#39;s blog">
     <meta name="description" content="一个大学生的学习和生活记录">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>test_my_site | Hsj&#39;s blog</title>
+    <title>qemu+gdb | Hsj&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -290,12 +290,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">test_my_site</h1>
+                    <h1 class="description center-align post-title">qemu+gdb</h1>
                 </div>
             </div>
         </div>
@@ -418,12 +418,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/others/">
+                                <span class="chip bg-color">others</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/others/" class="post-category">
+                                others
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -432,28 +445,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-03-21
+                    2023-03-22
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-03-21
+                    2023-03-25
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    0
+                    660
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    3 分
                 </div>
                 
 
@@ -476,7 +489,91 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <blockquote>
+<p>此教程是在：2.15版本的nasm + qemu-systrm-i386 + gdb下的调试</p>
+</blockquote>
+<h1 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h1><ol>
+<li><strong>qemu启动</strong>：在一个terminal启动qemu：<br>qemu-system-i386 -s -S -hda hd.img -serial null -parallel stdio</li>
+<li><strong>gdb启动</strong>：在另一个terminal启动gdb并且连接上qemu：<br>gdb<br>target remote:1234</li>
+<li><strong>加载符号表</strong>：add-symbol-file xxx.symbol 0xffff<ul>
+<li>在gdb之前<strong>生成符号表</strong>的操作：<ol>
+<li>生成可重定位文件xxx.o：<br>nasm -o xxx.o -g -f elf32 xxx.asm</li>
+<li>链接生成符号表和可执行文件：<br>ld -o xxx.symbol -melf_i386 -N xxx.o -Ttext 0xffff<br>ld -o xxx.bin -melf_i386 -N xxx.o -Ttext 0xffff –oformat binary</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>设置断点</strong></li>
+<li><strong>运行到断点</strong></li>
+<li><strong>开始调试</strong></li>
+</ol>
+<h2 id="简化上述流程"><a href="#简化上述流程" class="headerlink" title="简化上述流程"></a>简化上述流程</h2><blockquote>
+<p>配合makefile简化上述生成的流程</p>
+</blockquote>
+<p>makefile文件：</p>
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile"><span class="token target symbol">run</span><span class="token punctuation">:</span>
+	qemu-system-i386 -hda hd.img -serial null -parallel stdio 
+<span class="token target symbol">debug</span><span class="token punctuation">:</span>
+	qemu-system-i386 -s -S -hda hd.img -serial null -parallel stdio &amp;
+	sleep 1
+	gnome-terminal -e <span class="token string">"gdb -q -x gdbinit"</span>
+<span class="token target symbol">build</span><span class="token punctuation">:</span>
+	nasm -g -f elf32 mbr.asm -o mbr.o
+	ld -o mbr.symbol -melf_i386 -N mbr.o -Ttext 0x7c00
+	ld -o mbr.bin -melf_i386 -N mbr.o -Ttext 0x7c00 --oformat binary
+	nasm -g -f elf32 bootloader.asm -o bootloader.o
+	ld -o bootloader.symbol -melf_i386 -N bootloader.o -Ttext 0x7e00
+	ld -o bootloader.bin -melf_i386 -N bootloader.o -Ttext 0x7e00 --oformat binary
+	dd if<span class="token operator">=</span>mbr.bin of<span class="token operator">=</span>hd.img bs<span class="token operator">=</span>512 count<span class="token operator">=</span>1 seek<span class="token operator">=</span>0 conv<span class="token operator">=</span>notrunc
+	dd if<span class="token operator">=</span>bootloader.bin of<span class="token operator">=</span>hd.img bs<span class="token operator">=</span>512 count<span class="token operator">=</span>5 seek<span class="token operator">=</span>1 conv<span class="token operator">=</span>notrunc
+<span class="token target symbol">clean</span><span class="token punctuation">:</span>
+	rm -fr *.bin *.o *.symbol<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>gdbinit文件</p>
+<pre class="line-numbers language-none"><code class="language-none">target remote:1234
+set disassembly-flavor intel
+add-symbol-file mbr.symbol 0x7c00
+add-symbol-file bootloader.symbol 0x7e00<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li><strong>执行过程</strong>：<ol>
+<li>make build</li>
+<li>make debug</li>
+<li>接着就可以下断点调试</li>
+</ol>
+</li>
+</ul>
+<h2 id="gdb常用命令"><a href="#gdb常用命令" class="headerlink" title="gdb常用命令"></a>gdb常用命令</h2><h4 id="1-下断点"><a href="#1-下断点" class="headerlink" title="1. 下断点"></a>1. 下断点</h4><ul>
+<li>b *0x7c00：在<em>地址</em>下断点</li>
+<li>b function：在<em>函数名</em>function下断点（可以是c函数，也可以是汇编函数名）</li>
+<li>b filename:line：在对应<em>文件的对应行</em>下断点</li>
+<li>i b：<em>查看</em>断点</li>
+<li>d n：<em>删除</em>n号断点（配合i b使用）</li>
+</ul>
+<h4 id="2-继续运行"><a href="#2-继续运行" class="headerlink" title="2. 继续运行"></a>2. 继续运行</h4><ul>
+<li>c：continue，执行到断点</li>
+<li>s：step，单步进入（c）</li>
+<li>n：next，单步跳过（c）</li>
+<li>si：stepi，单步进入（汇编）</li>
+<li>ni：nexti，单步跳过（汇编）</li>
+</ul>
+<h4 id="3-查看内容"><a href="#3-查看内容" class="headerlink" title="3. 查看内容"></a>3. 查看内容</h4><ol>
+<li>查看当前文件、寄存器、内存的值<ul>
+<li>l n：查看<strong>当前文件从第n行</strong>开始</li>
+<li>i r：查看所有<strong>寄存器</strong>的值</li>
+<li>x/FMT 0xffff：查看<strong>内存地址的值</strong>（FMT：<strong>单元个数+格式+大小</strong>；<strong>格式</strong>是一个字符，可以是o(octal), x(hex), d(decimal), u(unsigned decimal), t(binary), f(float), a(address), i(instruction), c(char), s(string)；<strong>大小</strong>是一个字符，可以是b(byte, 1 byte), h(halfword, 2 bytes), w(word, 4 bytes), g(giant, 8 bytes)）</li>
+</ul>
+</li>
+<li><strong>layout</strong>查看<ul>
+<li>layout src/r/asm：查看源代码/寄存器值/反汇编后的汇编代码</li>
+<li>fs src/r/asm：focus到一个窗口（可用上下左右看对应窗口）</li>
+<li>Ctrl+x a：退出到只剩gdb窗口</li>
+<li>winheight src/r/asm +/- n：增长/缩短n行当前窗口</li>
+</ul>
+</li>
+</ol>
+<p>参考资料<a target="_blank" rel="noopener" href="https://gitee.com/nelsoncheung/sysu-2023-spring-operating-system/tree/main/appendix/debug_with_gdb_and_qemu">qemu + gdb</a></p>
+
                 
             </div>
             <hr/>
@@ -492,7 +589,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">hsj</a>
+                    <a href="/about" rel="external nofollow noreferrer">Hsj</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -502,7 +599,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://Huangsj1.github.io/2023/03/21/test-my-site/">http://Huangsj1.github.io/2023/03/21/test-my-site/</a>
+                    <a href="http://Huangsj1.github.io/2023/03/22/qemu-gdb/">http://Huangsj1.github.io/2023/03/22/qemu-gdb/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -515,7 +612,7 @@
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="/about" target="_blank">hsj</a>
+                    <a href="/about" target="_blank">Hsj</a>
                     !
                 </span>
             </div>
@@ -539,7 +636,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/others/">
+                                    <span class="chip bg-color">others</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -711,13 +812,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/03/22/qemu-gdb/">
+                <a href="/2023/03/22/build-block/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="qemu+gdb">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="搭建博客">
                         
-                        <span class="card-title">qemu+gdb</span>
+                        <span class="card-title">搭建博客</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -760,13 +861,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/03/21/hello-world/">
+                <a href="/2023/03/21/test-my-site/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="test_my_site">
                         
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">test_my_site</span>
                     </div>
                 </a>
                 <div class="card-content article-content">

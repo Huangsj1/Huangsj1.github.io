@@ -29,6 +29,31 @@
     
     
     <entry>
+      <title>qemu+gdb</title>
+      <link href="/2023/03/22/qemu-gdb/"/>
+      <url>/2023/03/22/qemu-gdb/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>此教程是在：2.15版本的nasm + qemu-systrm-i386 + gdb下的调试</p></blockquote><h1 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h1><ol><li><strong>qemu启动</strong>：在一个terminal启动qemu：<br>qemu-system-i386 -s -S -hda hd.img -serial null -parallel stdio</li><li><strong>gdb启动</strong>：在另一个terminal启动gdb并且连接上qemu：<br>gdb<br>target remote:1234</li><li><strong>加载符号表</strong>：add-symbol-file xxx.symbol 0xffff<ul><li>在gdb之前<strong>生成符号表</strong>的操作：<ol><li>生成可重定位文件xxx.o：<br>nasm -o xxx.o -g -f elf32 xxx.asm</li><li>链接生成符号表和可执行文件：<br>ld -o xxx.symbol -melf_i386 -N xxx.o -Ttext 0xffff<br>ld -o xxx.bin -melf_i386 -N xxx.o -Ttext 0xffff –oformat binary</li></ol></li></ul></li><li><strong>设置断点</strong></li><li><strong>运行到断点</strong></li><li><strong>开始调试</strong></li></ol><h2 id="简化上述流程"><a href="#简化上述流程" class="headerlink" title="简化上述流程"></a>简化上述流程</h2><blockquote><p>配合makefile简化上述生成的流程</p></blockquote><p>makefile文件：</p><pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile"><span class="token target symbol">run</span><span class="token punctuation">:</span>qemu-system-i386 -hda hd.img -serial null -parallel stdio <span class="token target symbol">debug</span><span class="token punctuation">:</span>qemu-system-i386 -s -S -hda hd.img -serial null -parallel stdio &amp;sleep 1gnome-terminal -e <span class="token string">"gdb -q -x gdbinit"</span><span class="token target symbol">build</span><span class="token punctuation">:</span>nasm -g -f elf32 mbr.asm -o mbr.old -o mbr.symbol -melf_i386 -N mbr.o -Ttext 0x7c00ld -o mbr.bin -melf_i386 -N mbr.o -Ttext 0x7c00 --oformat binarynasm -g -f elf32 bootloader.asm -o bootloader.old -o bootloader.symbol -melf_i386 -N bootloader.o -Ttext 0x7e00ld -o bootloader.bin -melf_i386 -N bootloader.o -Ttext 0x7e00 --oformat binarydd if<span class="token operator">=</span>mbr.bin of<span class="token operator">=</span>hd.img bs<span class="token operator">=</span>512 count<span class="token operator">=</span>1 seek<span class="token operator">=</span>0 conv<span class="token operator">=</span>notruncdd if<span class="token operator">=</span>bootloader.bin of<span class="token operator">=</span>hd.img bs<span class="token operator">=</span>512 count<span class="token operator">=</span>5 seek<span class="token operator">=</span>1 conv<span class="token operator">=</span>notrunc<span class="token target symbol">clean</span><span class="token punctuation">:</span>rm -fr *.bin *.o *.symbol<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>gdbinit文件</p><pre class="line-numbers language-none"><code class="language-none">target remote:1234set disassembly-flavor inteladd-symbol-file mbr.symbol 0x7c00add-symbol-file bootloader.symbol 0x7e00<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><ul><li><strong>执行过程</strong>：<ol><li>make build</li><li>make debug</li><li>接着就可以下断点调试</li></ol></li></ul><h2 id="gdb常用命令"><a href="#gdb常用命令" class="headerlink" title="gdb常用命令"></a>gdb常用命令</h2><h4 id="1-下断点"><a href="#1-下断点" class="headerlink" title="1. 下断点"></a>1. 下断点</h4><ul><li>b *0x7c00：在<em>地址</em>下断点</li><li>b function：在<em>函数名</em>function下断点（可以是c函数，也可以是汇编函数名）</li><li>b filename:line：在对应<em>文件的对应行</em>下断点</li><li>i b：<em>查看</em>断点</li><li>d n：<em>删除</em>n号断点（配合i b使用）</li></ul><h4 id="2-继续运行"><a href="#2-继续运行" class="headerlink" title="2. 继续运行"></a>2. 继续运行</h4><ul><li>c：continue，执行到断点</li><li>s：step，单步进入（c）</li><li>n：next，单步跳过（c）</li><li>si：stepi，单步进入（汇编）</li><li>ni：nexti，单步跳过（汇编）</li></ul><h4 id="3-查看内容"><a href="#3-查看内容" class="headerlink" title="3. 查看内容"></a>3. 查看内容</h4><ol><li>查看当前文件、寄存器、内存的值<ul><li>l n：查看<strong>当前文件从第n行</strong>开始</li><li>i r：查看所有<strong>寄存器</strong>的值</li><li>x/FMT 0xffff：查看<strong>内存地址的值</strong>（FMT：<strong>单元个数+格式+大小</strong>；<strong>格式</strong>是一个字符，可以是o(octal), x(hex), d(decimal), u(unsigned decimal), t(binary), f(float), a(address), i(instruction), c(char), s(string)；<strong>大小</strong>是一个字符，可以是b(byte, 1 byte), h(halfword, 2 bytes), w(word, 4 bytes), g(giant, 8 bytes)）</li></ul></li><li><strong>layout</strong>查看<ul><li>layout src/r/asm：查看源代码/寄存器值/反汇编后的汇编代码</li><li>fs src/r/asm：focus到一个窗口（可用上下左右看对应窗口）</li><li>Ctrl+x a：退出到只剩gdb窗口</li><li>winheight src/r/asm +/- n：增长/缩短n行当前窗口</li></ul></li></ol><p>参考资料<a href="https://gitee.com/nelsoncheung/sysu-2023-spring-operating-system/tree/main/appendix/debug_with_gdb_and_qemu">qemu + gdb</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> others </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> others </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>test_my_site</title>
       <link href="/2023/03/21/test-my-site/"/>
       <url>/2023/03/21/test-my-site/</url>

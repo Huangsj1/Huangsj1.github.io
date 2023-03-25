@@ -43,6 +43,34 @@
   </entry>
   
   <entry>
+    <title>qemu+gdb</title>
+    <link href="http://huangsj1.github.io/2023/03/22/qemu-gdb/"/>
+    <id>http://huangsj1.github.io/2023/03/22/qemu-gdb/</id>
+    <published>2023-03-22T07:31:25.000Z</published>
+    <updated>2023-03-25T14:14:00.047Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;此教程是在：2.15版本的nasm + qemu-systrm-i386 + gdb下的调试&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;基本流程&quot;&gt;&lt;a href=&quot;#基本流程&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="others" scheme="http://huangsj1.github.io/categories/others/"/>
+    
+    
+    <category term="others" scheme="http://huangsj1.github.io/tags/others/"/>
+    
+  </entry>
+  
+  <entry>
     <title>test_my_site</title>
     <link href="http://huangsj1.github.io/2023/03/21/test-my-site/"/>
     <id>http://huangsj1.github.io/2023/03/21/test-my-site/</id>

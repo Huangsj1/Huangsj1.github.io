@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://huangsj1.github.io/2023/03/22/qemu-gdb/</loc>
+    
+    <lastmod>2023-03-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://huangsj1.github.io/googlee463e71efe157467.html</loc>
     
     <lastmod>2023-03-23</lastmod>
@@ -103,7 +112,7 @@
 
   <url>
     <loc>http://huangsj1.github.io/</loc>
-    <lastmod>2023-03-23</lastmod>
+    <lastmod>2023-03-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -111,7 +120,7 @@
   
   <url>
     <loc>http://huangsj1.github.io/tags/others/</loc>
-    <lastmod>2023-03-23</lastmod>
+    <lastmod>2023-03-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -120,7 +129,7 @@
   
   <url>
     <loc>http://huangsj1.github.io/categories/others/</loc>
-    <lastmod>2023-03-23</lastmod>
+    <lastmod>2023-03-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
